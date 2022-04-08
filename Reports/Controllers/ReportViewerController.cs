@@ -25,9 +25,7 @@ public class ReportViewerController : ControllerBase, IReportController
 
     public void OnInitReportOptions(ReportViewerOptions reportOption)
     {
-        var currentPath = Directory.GetCurrentDirectory();
-        var reportName = reportOption.ReportModel.ReportPath.Split("/").Last();
-        var reportPath = Path.Combine(currentPath, "wwwroot", "Resources", reportName);
+        var reportPath = reportOption.ReportModel.ReportPath;
         FileStream reportStream =
             new FileStream(reportPath, FileMode.Open, FileAccess.Read);
         reportOption.ReportModel.Stream = reportStream;
@@ -38,10 +36,10 @@ public class ReportViewerController : ControllerBase, IReportController
     {
     }
 
-    [NonAction]
+    [HttpPost]
     public object PostFormReportAction()
     {
-        throw new NotImplementedException();
+        return ReportHelper.ProcessReport(null, this, _cache);
     }
 
     [ActionName("GetResource")]
